@@ -5,7 +5,7 @@ const pool = require('../modules/pool');
 const bodyParser = require('body-parser');
 
 router.get('/', function(request, response){
-    const sqlText = 'SELECT task_name, due_date, task_completed FROM tasks ORDER BY due_date';
+    const sqlText = 'SELECT * FROM tasks ORDER BY due_date';
     pool.query(sqlText)
       // query was successful
       .then(function(result) {
@@ -37,6 +37,19 @@ router.get('/', function(request, response){
         response.sendStatus(500);
       })
   }) // end post task
+
+  router.delete('/:id', (request, response) => {
+    const sqlText = `DELETE FROM tasks WHERE id=$1`;
+    const id =  request.params.id;
+    pool.query(sqlText, [id]).then((result) => {
+        console.log('Deleted Task', id);
+        response.sendStatus(200);
+    }) // end success
+    .catch((error) => {
+        console.log('error in router.delete', error);
+        response.sendStatus(500);
+    })
+  }) // end delete
 
 
 module.exports = router;

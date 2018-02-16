@@ -5,7 +5,14 @@ $(document).ready(onReady);
 function onReady() {
     console.log('JQ Sourced');
     getTasks();
+
     $('#addBtn').on('click', createTask);
+
+    $('#viewTasks').on('click', '.deleteBtn', function() {
+        const taskId = $(this).data('id');
+        deleteTask(taskId);
+      }) // end .deleteBtn click
+
 } // end onReady
 
 function getTasks() {
@@ -49,12 +56,33 @@ function addTask(newTask) {
 function displayTasks(tasks) {
     let $tableBody = $('#viewTasks');
     $tableBody.empty();
-        for(let row=0; row<tasks.length; row++) {
-         let keys = Object.keys(tasks[row]);
-            let $tr = $('<tr>');
-          for(let col=0; col<keys.length; col++) {
-         $tr.append($('<td>').attr('id', keys[col]).text(tasks[row][keys[col]])[0]);
-           } // end col loop
+    for(let row=0; row<tasks.length; row++) {
+        let keys = Object.keys(tasks[row]);
+      
+        let $tr = $('<tr>').attr('id', `tr${row + 1}`);
+        for(let col=0; col<keys.length + 2; col++) {
+            if(col === keys.length){
+              $tr.append($('<td>').addClass(keys[col]).append($('<button>').data('id', tasks[row].id).text('Delete Task').addClass('deleteBtn')));
+            } else if (col === keys.length +1) {
+              $tr.append($('<td>').addClass(`editButtons${row+1}`).append($('<button>').data('id', tasks[row].id).text('Edit Task').addClass('editBtn')));
+            } else {
+              $tr.append($('<td>').addClass(keys[col]).text(tasks[row][keys[col]])[0]);
+            } // end else
+        } // end col loop
         $tableBody.append($tr);
      } // end row loop
 } // end displayTasks
+
+function deleteTask(id) {
+    $.ajax({
+        type: 'DELETE',
+        url: `/tasks/${id}`,
+      }) // end AJAX
+      .done((response) => {
+        console.log('Task deleted');
+        getTasks();
+      }) // end done
+      .fail((error) => {
+        console.log('error', error);
+      }) // end fail
+} // end deleteTask
