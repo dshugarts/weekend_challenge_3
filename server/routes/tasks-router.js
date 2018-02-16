@@ -51,5 +51,18 @@ router.get('/', function(request, response){
     })
   }) // end delete
 
+  router.put('/:id', (request, response) => {
+    const id = request.params.id;
+    const sqlText = `UPDATE tasks SET task_completed=$1 WHERE id=$2`;
+    pool.query(sqlText, [true, id])
+      .then((result) => {
+        console.log(`Updated task ${id} with status true`);
+        response.sendStatus(200);
+      })
+      .catch( (error) => {
+        console.log('Error on update task');
+        response.sendStatus(500);
+      })
+  }) // end router.PUT for /:id
 
 module.exports = router;

@@ -13,6 +13,12 @@ function onReady() {
         deleteTask(taskId);
       }) // end .deleteBtn click
 
+    
+  $('#viewTasks').on('click', '.completeBtn', function() {
+    let id = $(this).data('id');
+    updateCompleted(id);
+  }) // end .transfer-btn click
+
 } // end onReady
 
 function getTasks() {
@@ -64,7 +70,7 @@ function displayTasks(tasks) {
             if(col === keys.length){
               $tr.append($('<td>').addClass(keys[col]).append($('<button>').data('id', tasks[row].id).text('Delete Task').addClass('deleteBtn')));
             } else if (col === keys.length +1) {
-              $tr.append($('<td>').addClass(`editButtons${row+1}`).append($('<button>').data('id', tasks[row].id).text('Edit Task').addClass('editBtn')));
+              $tr.append($('<td>').addClass(`completeBtns${row+1}`).append($('<button>').data('id', tasks[row].id).text('Complete Task').addClass('completeBtn')));
             } else {
               $tr.append($('<td>').addClass(keys[col]).text(tasks[row][keys[col]])[0]);
             } // end else
@@ -86,3 +92,18 @@ function deleteTask(id) {
         console.log('error', error);
       }) // end fail
 } // end deleteTask
+
+function updateCompleted(id) {
+    $.ajax({
+        type: 'PUT',
+        url: `/tasks/${id}`,
+        data: {id}
+      }) // end AJAX
+      .done(function (response) {
+        console.log('Updated task complete status');
+        getTasks();
+      }) // end done
+      .fail(function (error){
+        console.log(error);
+      }) // end fail
+} // end update completed
