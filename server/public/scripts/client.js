@@ -5,6 +5,7 @@ $(document).ready(onReady);
 function onReady() {
     console.log('JQ Sourced');
     getTasks();
+    $('#addBtn').on('click', createTask);
 } // end onReady
 
 function getTasks() {
@@ -18,6 +19,32 @@ function getTasks() {
         } // END success
       }); //END ajax
 } // end getTasks
+
+function createTask() {
+    console.log('in addTask');
+    var taskToSend = {
+        task_name: $('#taskName').val(),
+        due_date: $('#dueDate').val(),
+        task_completed: $('#taskCompleted').val(),
+      }; // end taskToSend
+    addTask(taskToSend);
+} // end creteTask
+
+function addTask(newTask) {
+    console.log('in addTask', newTask);
+    $.ajax({
+        url: '/tasks',
+        type: 'POST',
+        data: newTask,
+        success: function(data){
+          console.log('got some tasks: ', data);
+          $('#taskName').val('');
+          $('#dueDate').val('');
+          $('#taskComplete').val('');
+          getTasks();
+        } // end success
+      }); //end ajax
+} // end addTask
 
 function displayTasks(tasks) {
     let $tableBody = $('#viewTasks');

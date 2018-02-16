@@ -17,11 +17,23 @@
     </br>
     </br>
     <div>
+    <div id="addTask">
+      <h2>Add Task</h2>
+        <input type="text" id="taskName" value="" placeholder="Task Description">
+        <input type="date" id="dueDate" value="" placeholder="date">
+        <select id="taskCompleted">
+            <option value="" disabled selected>Task Complete</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+        <button type="button" id="addBtn">Add Task to List</button>
+    </div>
+</br>
+</br>
         <h2>All Tasks</h2>
         <table class="table">
           <thead>
             <tr>
-              <th>Task ID</th>
               <th>Task Name</th>
               <th>Due Date</th>
               <th>Task Completed</th>
