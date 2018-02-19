@@ -107,3 +107,4 @@ function updateCompleted(id) {
         console.log(error);
       }) // end fail
 } // end update completed
+
